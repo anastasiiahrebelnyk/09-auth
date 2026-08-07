@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import TanstackProvider from '@/components/TanStackProvider/TanStackProvider';
+import AuthProvider from '@/components/AuthProvider/AuthProvider';
 
 // const geistSans = Geist({
 //   variable: '--font-geist-sans',
@@ -52,12 +53,14 @@ export default function RootLayout({
     <html lang="en" className={`${roboto.variable} ${roboto.variable}`}>
       <body className="flex min-h-full flex-col bg-background text-foreground">
         <TanstackProvider>
-          <Header />
-          <main className="flex-1">
-            {children}
-            {modal}
-          </main>
-          <Footer />
+          <AuthProvider>
+            <Header />
+            <main className="flex-1">
+              {children}
+              {modal}
+            </main>
+            <Footer />
+          </AuthProvider>
         </TanstackProvider>
       </body>
     </html>
