@@ -8,10 +8,10 @@ export interface NoteHTTPResponse {
 }
 
 export type RegisterRequest = {
-  userName: string;
+  userName?: string;
   email: string;
   avatar?: string;
-  // password: string;
+  password: string;
 };
 
 export type LoginRequest = {
@@ -55,18 +55,18 @@ export const fetchNoteById = async (id: Note['id']): Promise<Note> => {
 
 export const createNote = async (values: NoteFormValues): Promise<Note> => {
   const { data } = await API.post<Note>('/notes', values, {
-    // headers: {
-    //   Authorization: `Bearer ${API_KEY}`,
-    // },
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
   });
   return data;
 };
 
 export const deleteNote = async (noteId: Note['id']): Promise<Note> => {
   const { data } = await API.delete<Note>(`/notes/${noteId}`, {
-    // headers: {
-    //   Authorization: `Bearer ${API_KEY}`,
-    // },
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
   });
   return data;
 };
@@ -82,20 +82,36 @@ export const login = async (data: LoginRequest) => {
 };
 
 export const logout = async () => {
-  await API.post<User>('/auth/logout');
+  await API.post<User>('/auth/logout', {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
 };
 
 export const checkSession = async () => {
-  const { data } = await API.get<CheckSessionRequest>('/auth/session');
+  const { data } = await API.get<CheckSessionRequest>('/auth/session', {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
   return data.success;
 };
 
 export const getMe = async () => {
-  const { data } = await API.get<User>('/users/me');
+  const { data } = await API.get<User>('/users/me', {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
   return data;
 };
 
 export const updateMe = async (data: RegisterRequest) => {
-  const res = await API.patch<User>('/users/me', data);
+  const res = await API.patch<User>('/users/me', data, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
   return res.data;
 };

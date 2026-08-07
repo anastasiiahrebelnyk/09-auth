@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import css from './ProfilePage.module.css';
 import Link from 'next/link';
-import { getMe } from '@/lib/api/clientApi';
+import { getMe } from '@/lib/api/serverApi';
 
 export default async function Profile() {
   const user = await getMe();
@@ -24,8 +24,8 @@ export default async function Profile() {
           />
         </div>
         <div className={css.profileInfo}>
-          <p>Username: ${user.username}</p>
-          <p>Email: ${user.email}</p>
+          <p>Username: {user.username}</p>
+          <p>Email: {user.email}</p>
         </div>
       </div>
     </main>

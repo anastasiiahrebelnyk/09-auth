@@ -1,7 +1,10 @@
-import { useRouter } from 'next/router';
+'use client';
+
 import css from './AuthNavigation.module.css';
 import { useAuthStore } from '@/lib/store/authStore';
 import { logout } from '@/lib/api/clientApi';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function AuthNavigation() {
   //  const queryClient = new QueryClient();
@@ -28,15 +31,15 @@ export default function AuthNavigation() {
     return (
       <>
         <li className={css.navigationItem}>
-          <a href="/sign-in" prefetch={false} className={css.navigationLink}>
+          <Link href="/sign-in" prefetch={false} className={css.navigationLink}>
             Login
-          </a>
+          </Link>
         </li>
 
         <li className={css.navigationItem}>
-          <a href="/sign-up" prefetch={false} className={css.navigationLink}>
+          <Link href="/sign-up" prefetch={false} className={css.navigationLink}>
             Sign up
-          </a>
+          </Link>
         </li>
       </>
     );
@@ -44,9 +47,9 @@ export default function AuthNavigation() {
   return (
     <>
       <li className={css.navigationItem}>
-        <a href="/profile" prefetch={false} className={css.navigationLink}>
+        <Link href="/profile" prefetch={false} className={css.navigationLink}>
           Profile
-        </a>
+        </Link>
       </li>
 
       <li className={css.navigationItem}>

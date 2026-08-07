@@ -1,6 +1,7 @@
 import { Note } from '@/types/note';
 import { API } from './api';
 import { NoteHTTPResponse } from './clientApi';
+import { cookies } from 'next/headers';
 
 import { User } from '@/types/user';
 
@@ -32,29 +33,35 @@ export const fetchNotes = async (
       search,
       tag,
     },
-    // headers: {
-    //   Authorization: `Bearer ${API_KEY}`,
-    // },
+
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
   });
   return res.data;
 };
 
 export const fetchNoteById = async (id: Note['id']): Promise<Note> => {
   const res = await API.get<Note>(`/notes/${id}`, {
-    // headers: {
-    //   Authorization: `Bearer ${API_KEY}`,
-    // },
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
   });
   return res.data;
 };
 
 export const checkSession = async () => {
-  const { data } = await API.get<CheckSessionRequest>('/auth/session');
+  const { data } = await API.get<CheckSessionRequest>('/auth/session', {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
   return data.success;
 };
 
 export const getMe = async () => {
-  const { data } = await API.get<User>('/auth/me', {
+  const cookieStore = await cookies();
+  const { data } = await API.get<User>('/users/me', {
     headers: {
       Cookie: cookieStore.toString(),
     },
