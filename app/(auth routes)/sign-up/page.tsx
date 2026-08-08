@@ -39,6 +39,11 @@ export default function SignUp() {
       setIsLoading(false);
     }
   };
+
+  if (error) {
+    return <p className={css.error}>Error: {error}</p>;
+  }
+
   return (
     <main className={css.mainContent}>
       <h1 className={css.formTitle}>Sign up</h1>
@@ -70,8 +75,6 @@ export default function SignUp() {
             Register
           </button>
         </div>
-
-        <p className={css.error}>Error</p>
       </form>
     </main>
   );
