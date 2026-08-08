@@ -9,7 +9,7 @@ export type RegisterRequest = {
   userName: string;
   email: string;
   avatar: string;
-  // password: string;
+  password?: string;
 };
 
 export type LoginRequest = {
@@ -26,6 +26,8 @@ export const fetchNotes = async (
   search: string | undefined,
   tag: string | undefined
 ): Promise<NoteHTTPResponse> => {
+  const cookieStore = await cookies();
+
   const res = await API.get<NoteHTTPResponse>('/notes', {
     params: {
       page,
@@ -42,6 +44,8 @@ export const fetchNotes = async (
 };
 
 export const fetchNoteById = async (id: Note['id']): Promise<Note> => {
+  const cookieStore = await cookies();
+
   const res = await API.get<Note>(`/notes/${id}`, {
     headers: {
       Cookie: cookieStore.toString(),
@@ -51,6 +55,8 @@ export const fetchNoteById = async (id: Note['id']): Promise<Note> => {
 };
 
 export const checkSession = async () => {
+  const cookieStore = await cookies();
+
   const { data } = await API.get<CheckSessionRequest>('/auth/session', {
     headers: {
       Cookie: cookieStore.toString(),
@@ -61,6 +67,7 @@ export const checkSession = async () => {
 
 export const getMe = async () => {
   const cookieStore = await cookies();
+
   const { data } = await API.get<User>('/users/me', {
     headers: {
       Cookie: cookieStore.toString(),

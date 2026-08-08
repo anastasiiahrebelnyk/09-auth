@@ -1,4 +1,4 @@
-import { Note, NoteFormValues } from '@/types/note';
+import { Note, Tag } from '@/types/note';
 import { API } from './api';
 import { User } from '@/types/user';
 
@@ -8,10 +8,10 @@ export interface NoteHTTPResponse {
 }
 
 export type RegisterRequest = {
-  userName?: string;
+  username?: string;
   email: string;
   avatar?: string;
-  password?: string;
+  password: string;
 };
 
 export type LoginRequest = {
@@ -24,9 +24,15 @@ export type CheckSessionRequest = {
 };
 
 export type UpdateMeRequest = {
-  email: string;
+  //   email: string;
   username: string;
 };
+
+export interface NoteFormValues {
+  title: string;
+  content: string;
+  tag: Tag;
+}
 
 // const API = axios.create({ baseURL: 'https://notehub-api.goit.study' });
 
@@ -59,20 +65,12 @@ export const fetchNoteById = async (id: Note['id']): Promise<Note> => {
 };
 
 export const createNote = async (values: NoteFormValues): Promise<Note> => {
-  const { data } = await API.post<Note>('/notes', values, {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
+  const { data } = await API.post<Note>('/notes', values);
   return data;
 };
 
 export const deleteNote = async (noteId: Note['id']): Promise<Note> => {
-  const { data } = await API.delete<Note>(`/notes/${noteId}`, {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
+  const { data } = await API.delete<Note>(`/notes/${noteId}`);
   return data;
 };
 
@@ -87,36 +85,20 @@ export const login = async (data: LoginRequest) => {
 };
 
 export const logout = async () => {
-  await API.post<User>('/auth/logout', {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
+  await API.post<User>('/auth/logout');
 };
 
 export const checkSession = async () => {
-  const { data } = await API.get<CheckSessionRequest>('/auth/session', {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
+  const { data } = await API.get<CheckSessionRequest>('/auth/session');
   return data.success;
 };
 
 export const getMe = async () => {
-  const { data } = await API.get<User>('/users/me', {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
+  const { data } = await API.get<User>('/users/me');
   return data;
 };
 
 export const updateMe = async (data: UpdateMeRequest) => {
-  const res = await API.patch<User>('/users/me', data, {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
+  const res = await API.patch<User>('/users/me', data);
   return res.data;
 };

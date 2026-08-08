@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { parseCookie } from 'cookie';
+import { parseSetCookie } from 'cookie';
 import { api } from './app/api/api';
 
 const privateRoutes = ['/profile'];
@@ -8,7 +8,6 @@ const authRoutes = ['/sign-in', '/sign-up'];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
   const cookieStore = await cookies();
 
   const accessToken = cookieStore.get('accessToken');
@@ -33,20 +32,20 @@ export async function proxy(request: NextRequest) {
         const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
 
         for (const cookieString of cookieArray) {
-          const parsed = parseCookie(cookieString);
+          const parsed = parseSetCookie(cookieString);
 
           const options = {
-            expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
-            path: parsed.Path,
-            maxAge: Number(parsed['Max-Age']),
+            expires: parsed.expires ? new Date(parsed.expires) : undefined,
+            path: parsed.path,
+            maxAge: parsed.maxAge,
           };
 
-          if (parsed.accessToken !== undefined) {
-            cookieStore.set('accessToken', parsed.accessToken, options);
+          if (parsed.name === 'accessToken' && parsed.value) {
+            cookieStore.set('accessToken', parsed.value, options);
           }
 
-          if (parsed.refreshToken !== undefined) {
-            cookieStore.set('refreshToken', parsed.refreshToken, options);
+          if (parsed.name === 'refreshToken' && parsed.value) {
+            cookieStore.set('refreshToken', parsed.value, options);
           }
         }
 
@@ -87,5 +86,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/profile/:path*', '/sign-in', '/sign-up'],
+  matcher: ['/profile/:path*', '/notes/:path*', '/sign-in', '/sign-up'],
 };

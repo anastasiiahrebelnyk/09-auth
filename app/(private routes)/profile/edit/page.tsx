@@ -20,13 +20,13 @@ export default function EditProfile() {
 
   const handleSubmit = async (formData: FormData) => {
     const username = formData.get('username') as string;
-    const email = user.email;
+    // const email = user.email;
 
     setError('');
     setIsLoading(true);
 
     try {
-      updateMe({ username, email });
+      await updateMe({ username });
       router.push('/profile');
     } catch (error) {
       setError(
@@ -70,7 +70,11 @@ export default function EditProfile() {
             <button type="submit" className={css.saveButton}>
               Save
             </button>
-            <button type="button" className={css.cancelButton}>
+            <button
+              type="button"
+              className={css.cancelButton}
+              onClick={router.back}
+            >
               Cancel
             </button>
           </div>
