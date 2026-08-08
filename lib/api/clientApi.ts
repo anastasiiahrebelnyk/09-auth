@@ -11,7 +11,7 @@ export type RegisterRequest = {
   userName?: string;
   email: string;
   avatar?: string;
-  password: string;
+  password?: string;
 };
 
 export type LoginRequest = {
@@ -21,6 +21,11 @@ export type LoginRequest = {
 
 export type CheckSessionRequest = {
   success: boolean;
+};
+
+export type UpdateMeRequest = {
+  email: string;
+  username: string;
 };
 
 // const API = axios.create({ baseURL: 'https://notehub-api.goit.study' });
@@ -107,7 +112,7 @@ export const getMe = async () => {
   return data;
 };
 
-export const updateMe = async (data: RegisterRequest) => {
+export const updateMe = async (data: UpdateMeRequest) => {
   const res = await API.patch<User>('/users/me', data, {
     headers: {
       Cookie: cookieStore.toString(),
